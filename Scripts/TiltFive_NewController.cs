@@ -1,8 +1,13 @@
-﻿using UnityEngine;
+﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
+using Input = TiltFive.Input;
 
-//[RequireComponent(typeof(SteamVR_TrackedObject))]
 public class TiltFive_NewController : MonoBehaviour {
+
+    public TiltFiveDemos.T5UIInput device;
 
     public bool triggerPressed = false;
     public bool padPressed = false;
@@ -29,56 +34,44 @@ public class TiltFive_NewController : MonoBehaviour {
     [HideInInspector] public Vector3 endPos = Vector3.zero;
     [HideInInspector] public float triggerVal;
 
-    private SteamVR_TrackedObject trackedObj;
-    private SteamVR_Controller.Device device;
 
     private float touchPadLimit = 0.6f; // 0.7f;
 
-    private void Awake() {
-        trackedObj = GetComponent<SteamVR_TrackedObject>();
-    }
-
-    private void FixedUpdate() {
-        device = SteamVR_Controller.Input((int)trackedObj.index);
-    }
-
     private void Update() {
-        //var device = SteamVR_Controller.Input((int) trackedObj.index);
-
         resetButtons();
         checkTriggerVal();
         checkPadDir();
 
-        if (device.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger)) {
+        if (device) {
             triggerPressed = true;
             triggerDown = true;
             startPos = transform.position;
-        } else if (device.GetTouchUp(SteamVR_Controller.ButtonMask.Trigger)) {
+        } else if (device) {
             triggerPressed = false;
             triggerUp = true;
             endPos = transform.position;
         }
 
-        if (device.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad)) {
+        if (device) {
             padPressed = true;
             padDown = true;
-        } else if (device.GetPressUp(SteamVR_Controller.ButtonMask.Touchpad)) {
+        } else if (device) {
             padPressed = false;
             padUp = true;
         }
 
-        if (device.GetPressDown(SteamVR_Controller.ButtonMask.Grip)) {
+        if (device) {
             gripped = true;
             gripDown = true;
-        } else if (device.GetPressUp(SteamVR_Controller.ButtonMask.Grip)) {
+        } else if (device) {
             gripped = false;
             gripUp = true;
         }
 
-        if (device.GetPressDown(SteamVR_Controller.ButtonMask.ApplicationMenu)) {
+        if (device) {
             menuPressed = true;
             menuDown = true;
-        } else if (device.GetPressUp(SteamVR_Controller.ButtonMask.ApplicationMenu)) {
+        } else if (device) {
             menuPressed = false;
             menuUp = true;
         }
@@ -102,11 +95,11 @@ public class TiltFive_NewController : MonoBehaviour {
     }
 
     private void checkTriggerVal() {
-        triggerVal = device.GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger).x;
+        //triggerVal = device.GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger).x;
     }
 
     private void checkPadDir() {
-        touchpad = device.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0);
+        //touchpad = device.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0);
 
         if (touchpad.y > touchPadLimit) {
             padDirUp = true;
@@ -130,15 +123,14 @@ public class TiltFive_NewController : MonoBehaviour {
     }
 
     float defaultVibrationVal = 2f;
-
     public void vibrateController() {
-        int ms = (int)defaultVibrationVal * 1000;
-        device.TriggerHapticPulse((ushort)ms, Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad);
+        //int ms = (int)defaultVibrationVal * 1000;
+        //device.TriggerHapticPulse((ushort)ms, Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad);
     }
 
     public void vibrateController(float val) {
-        int ms = (int)val * 1000;
-        device.TriggerHapticPulse((ushort)ms, Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad);
+        //int ms = (int)val * 1000;
+        //device.TriggerHapticPulse((ushort)ms, Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad);
     }
 
 }
